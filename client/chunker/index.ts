@@ -3,6 +3,9 @@ import path from 'path';
 
 const CHUNK_SIZE = 1024 * 1024; // bytes
 
+/**
+ * TODO: assign a hash, sequence and filename to the chunk
+ */
 function chunkBuffer(buffer: Buffer) {
 	const bufferSize = buffer.byteLength;
 	let offset = 0;
