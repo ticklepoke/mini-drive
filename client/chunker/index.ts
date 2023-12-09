@@ -1,32 +1,32 @@
 import { readFileSync } from 'fs';
 import path from 'path';
+import { Chunk } from './chunk';
 
-const CHUNK_SIZE = 1024 * 1024; // bytes
+export type OnChunkRead = (chunk: Chunk) => void;
 
-/**
- * TODO: assign a hash, sequence and filename to the chunk
- */
-function chunkBuffer(buffer: Buffer) {
+const CHUNK_SIZE = 4096 * 1024; // bytes
+
+export function consumeFile(filePath: string, onChunkRead: OnChunkRead) {
+	const buffer = readFileSync(filePath);
+	const fileName = getFileName(filePath);
+	chunkBuffer(buffer, fileName, onChunkRead);
+}
+
+function chunkBuffer(buffer: Buffer, fileName: string, onChunkRead: OnChunkRead) {
 	const bufferSize = buffer.byteLength;
 	let offset = 0;
+	let sequence = 1;
 
 	while (offset < bufferSize) {
-		const chunk = buffer.subarray(offset, offset + CHUNK_SIZE);
-		console.log(chunk, offset);
-		offset += chunk.byteLength;
+		const bufferChunk = buffer.subarray(offset, offset + CHUNK_SIZE);
+		onChunkRead(new Chunk(bufferChunk, fileName, sequence));
+		sequence++;
+		offset += bufferChunk.byteLength;
 	}
-	console.log('done reading file');
+	console.info('Done reading file: ', fileName);
 }
 
-function readBuffer(fileName: string) {
-	const buffer = readFileSync(path.join(process.cwd(), '../../../', 'Downloads/VID_20231129_172444_00_002.mp4'));
-
-	return buffer;
+function getFileName(filePath: string) {
+	const paths = filePath.split('/');
+	return paths[paths.length - 1];
 }
-
-function main() {
-	const buffer = readBuffer('foo');
-	chunkBuffer(buffer);
-}
-
-main();

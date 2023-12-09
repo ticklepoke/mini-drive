@@ -4,15 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "chunker": "ts-node chunker/index.ts"
+    "drive": "ts-node driver.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "amqplib": "^0.10.3",
     "typescript": "^5.3.3"
   },
   "devDependencies": {
+    "@types/amqplib": "^0.10.4",
     "@types/node": "^20.10.4",
     "ts-node": "^10.9.2"
   }
