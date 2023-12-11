@@ -8,7 +8,7 @@ export class ChunkOperations {
 		client.on('error', (err) => console.error('Redis Client Error', err));
 	}
 
-	async of() {
+	static async of() {
 		try {
 			const client: RedisClientType = createClient();
 			client.configSet('appendonly', 'yes');

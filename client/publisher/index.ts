@@ -1,6 +1,6 @@
 import amqplib, { Channel, Connection } from 'amqplib';
 
-const QUEUE = 'chunks';
+const QUEUE = 'wip_chunks';
 
 export class Publisher<T extends WithImplicitCoercion<string>> {
 	private connection: Connection;
