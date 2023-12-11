@@ -11,11 +11,13 @@ async function findSDCard() {
 	return sdCard;
 }
 
-const pollSDCardJob = schedule.scheduleJob('*/10 * * * * *', async () => {
-	const card = await findSDCard();
-	if (card === null) return;
-	const jobLock = JobLock.getInstance(async () => {
-		console.log('running');
+export function addJob(jobFn: () => Promise<void>) {
+	const pollSDCardJob = schedule.scheduleJob('*/10 * * * * *', async () => {
+		const card = await findSDCard();
+		if (card === null) return;
+		const jobLock = JobLock.getInstance(async () => {
+			await jobFn();
+		});
+		jobLock.run();
 	});
-	jobLock.run();
-});
+}
